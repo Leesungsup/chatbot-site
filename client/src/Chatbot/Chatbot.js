@@ -1,7 +1,9 @@
 import React,{useEffect} from 'react'
 import Axios from 'axios'
-
+import {useDispatch,useSelector} from 'react-redux'
+import {saveMessage} from '../_actions/message_actions'
 function Chatbot() {
+    const dispatch=new useDispatch();
     useEffect(() => {
         eventQuery('Welcome1')
         
@@ -16,6 +18,7 @@ function Chatbot() {
                 }
             }
         }
+        dispatch(saveMessage(conversation))
         console.log(conversation)
         const textQueryVariables={
             text
@@ -27,6 +30,7 @@ function Chatbot() {
             who:'bot',
             content:content
         }
+        dispatch(saveMessage(conversation))
         console.log(conversation)
         }catch(error){
             conversation={
@@ -37,6 +41,7 @@ function Chatbot() {
                     }
                 }
             }
+            dispatch(saveMessage(conversation))
             console.log(conversation)
         }
     }
@@ -52,6 +57,7 @@ function Chatbot() {
             who:'bot',
             content:content
         }
+        dispatch(saveMessage(conversation))
         console.log(conversation)
         }catch(error){
             let conversation={
@@ -62,6 +68,7 @@ function Chatbot() {
                     }
                 }
             }
+            dispatch(saveMessage(conversation))
             console.log(conversation)
         }
     }
