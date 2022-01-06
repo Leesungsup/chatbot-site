@@ -2,7 +2,7 @@ import React,{useEffect} from 'react'
 import Axios from 'axios'
 import {useDispatch,useSelector} from 'react-redux'
 import {saveMessage} from '../_actions/message_actions'
-import {List,Icon,Avatar} from 'antd'
+import Message from './Sections/Message'
 function Chatbot() {
     const dispatch=new useDispatch();
     const messagesFromRedux=new useSelector(state=>state.message.messages);
@@ -27,13 +27,16 @@ function Chatbot() {
         }
         try{
         const response=await Axios.post('/api/dialogflow/textQuery',textQueryVariables)
-        const content= response.data.fulfillmentMessages[0]
+
+        //const content= response.data.fulfillmentMessages[0]
+        for(let content of response.data.fulfillmentMessages){
         conversation={
             who:'bot',
             content:content
         }
         dispatch(saveMessage(conversation))
         console.log(conversation)
+    }
         }catch(error){
             conversation={
                 who:'bot',
@@ -54,13 +57,15 @@ function Chatbot() {
         }
         try{
         const response=await Axios.post('/api/dialogflow/eventQuery',eventQueryVariables)
-        const content= response.data.fulfillmentMessages[0]
-        let conversation={
-            who:'bot',
-            content:content
+        //const content= response.data.fulfillmentMessages[0]
+        for(let content of response.data.fulfillmentMessages){
+            let conversation={
+                who:'bot',
+                content:content
+            }
+            dispatch(saveMessage(conversation))
+            console.log(conversation)
         }
-        dispatch(saveMessage(conversation))
-        console.log(conversation)
         }catch(error){
             console.log(error)
             let conversation={
@@ -86,15 +91,7 @@ function Chatbot() {
     }
     const renderOneMessage=(message,i)=>{
         console.log('message',message)
-        return <div>
-                <List.Item key={i} style={{ padding: '1rem' }}>
-                    <List.Item.Meta
-                        avatar={<Avatar icon />}
-                        title={message.who}
-                        description={message.content.text.text}
-                    />
-                </List.Item>
-            </div>
+        //return <Message key={i} who={message.who} content={message.content.text.text} />
     }
     const renderMessage=(returnedMessages)=>{
         if(returnedMessages){
